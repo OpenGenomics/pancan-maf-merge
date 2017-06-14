@@ -1,0 +1,125 @@
+cwlVersion: v1.0
+class: Workflow
+
+label: Annotate a single subject
+doc: TODO
+
+requirements:
+  # TODO subworkflow
+
+inputs:
+  tumor_id:
+    type: string
+  normal_id:
+    type: string
+  genome_reference:
+    type: File
+  cosmic_reference:
+    type: File
+  valstatus_database:
+    type: File
+  muse_variants:
+    type: File[]
+  radia_variants:
+    type: File[]
+  somaticsniper_variants:
+    type: File[]
+  varscan_snp_vcfs:
+    type: File[]
+  varscan_indel_vcfs:
+    type: File[]
+
+outputs:
+  maf:
+    type: File
+    outputSource: post_process_maf/output
+
+steps:
+  preprocess_muse:
+    label: Filter and sort MuSE variants
+    doc:
+    in:
+      variants: muse_variants
+    out: output
+    scatter: variants
+    run: ../preprocess_muse/tool.cwl.yaml
+
+  preprocess_radia:
+    label: Filter and sort Radia variants
+    doc:
+    in:
+      variants: radia_variants
+    out: output
+    scatter: variants
+    run: ../preprocess_radia/tool.cwl.yaml
+
+  preprocess_somaticsniper:
+    label: Filter and sort SomaticSniper variants
+    doc:
+    in:
+      variants: somaticsniper_variants
+    out: output
+    scatter: variants
+    run: ../preprocess_somaticsniper/tool.cwl.yaml
+
+  preprocess_varscan_snp:
+    label: Filter Varscan SNPs
+    doc:
+    in:
+      variants: varscan_snp_variants
+    out: output
+    scatter: variants
+    run: ../preprocess_varscan_snp/tool.cwl.yaml
+
+  preprocess_varscan_indel:
+    label: Filter Varscan indels
+    doc:
+    in:
+      variants: varscan_indel_variants
+    out: output
+    scatter: variants
+    run: ../preprocess_varscan_indel/tool.cwl.yaml
+
+  merge_variants:
+    label: Merge variants
+    doc:
+    in:
+      variants:
+        linkMerge: merge_flattened
+        source:
+          - preprocess_muse/output
+          - preprocess_radia/output
+          - preprocess_somaticsniper/output
+          - preprocess_varscan_snp/output
+          - preprocess_varscan_indel/output
+    out: output
+    run: ../merge_variants/tool.cwl.yaml
+
+  variant_effect_predictor:
+    label: Variant effect predictor (VEP)
+    doc:
+    in:
+      variants: merge_variants/output
+    out: output
+    run: ../variant_effect_predictor/tool.cwl.yaml
+
+  annotate_vcf_cosmic:
+    label: Annotate VCF Cosmic
+    doc:
+    in:
+      genome_reference: genome_reference
+      cosmic_reference: cosmic_reference
+      valstatus_database: valstatus_database
+      vep_annotation: variant_effect_predictor/output
+    out: output
+    run: ../annotate_vcf_cosmic/tool.cwl.yaml
+
+  convert_vcf_to_maf:
+    label: VCF to MAF
+    doc:
+    in:
+      vcf: annotate_vcf_cosmic/output
+      tumor_id: tumor_id
+      normal_id: normal_id
+    out: output
+    run: ../convert_vcf_to_maf/tool.cwl.yaml

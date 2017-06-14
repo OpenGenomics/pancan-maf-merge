@@ -2,24 +2,21 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 label: Filter MuSE
+doc:
 
 requirements:
-  - class: "DockerRequirement"
-    dockerImageId: "TODO"
+  - class: DockerRequirement
+    dockerImageId: opengenomics/filter_muse
 
 baseCommand: [python, /opt/bin/filter_muse.py, --level 5]
 
-arguments:
-  - position: 5
-    valueFrom: outputFileTODO
-
 inputs:
-  - id: TODO_input_name
+  variants:
     type: File
-    position: 4
+    prefix: --input
 
 outputs:
-  - id: TODO_output_ID
+  variants:
     type: File
     outputBinding:
-      glob: outputFileTODO
+      glob: output.vcf

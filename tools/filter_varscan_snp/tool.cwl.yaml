@@ -4,8 +4,8 @@ class: CommandLineTool
 label: Filter Somaticsniper
 
 requirements:
-  - class: "DockerRequirement"
-    dockerImageId: "TODO"
+  - class: DockerRequirement
+    dockerImageId: opengenomics/filter_varscan_snp
 
 baseCommand: [perl, /opt/bin/vcf2maf/vcf2vcf.pl, --add-filter]
 

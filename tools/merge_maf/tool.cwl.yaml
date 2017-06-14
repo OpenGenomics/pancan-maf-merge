@@ -1,0 +1,23 @@
+cwlVersion: v1.0
+class: Workflow
+
+inputs:
+
+outputs:
+
+steps:
+
+  concatenate_all_mafs:
+    label: Concatenate all MAFs
+    doc:
+    in:
+      mafs
+    out: output
+    run:
+
+  post_process_maf:
+    label: Post-process MAF
+    doc:
+    in:
+    out: output
+    run:
