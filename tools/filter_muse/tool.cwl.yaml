@@ -2,7 +2,6 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 label: Filter MuSE
-doc:
 
 requirements:
   - class: DockerRequirement
@@ -11,12 +10,13 @@ requirements:
 baseCommand: [python, /opt/bin/filter_muse.py, --level 5]
 
 inputs:
-  variants:
+  vcf:
     type: File
-    prefix: --input
+    inputBinding:
+      prefix: --input
 
 outputs:
-  variants:
+  output_vcf:
     type: File
     outputBinding:
       glob: output.vcf

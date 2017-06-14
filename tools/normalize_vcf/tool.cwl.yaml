@@ -1,13 +1,11 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Filter Radia
-
 requirements:
   - class: DockerRequirement
-    dockerImageId: opengenomics/filter_radia
+    dockerImageId: opengenomics/normalize_vcf
 
-baseCommand: [python, /opt/bin/filter_radia.py]
+baseCommand: [python]
 
 inputs:
   vcf:

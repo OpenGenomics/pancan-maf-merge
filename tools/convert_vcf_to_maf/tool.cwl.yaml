@@ -1,11 +1,11 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: 
+label: Convert VCF to MAF
 
 requirements:
-  - class: "DockerRequirement"
-    dockerImageId: "TODO"
+  - class: DockerRequirement
+    dockerImageId: opengenomics/vcf_to_maf
 
 baseCommand:
   - /hgsc_software/perl/perl-5.16.2/bin/perl
@@ -15,29 +15,24 @@ baseCommand:
   - -copythrough COSMIC,CENTERS,CONTEXT,DBVS
 
 inputs:
-  - id: input_vcf
-    prefix: -input-vcf
+  vcf:
     type: File
+    inputBinding:
+      prefix: -input-vcf
 
-  - id: vcf_tumor_id
-    prefix: -vcf-tumor-id
-    type: string ?
+  tumor_id:
+    type: string
+    inputBinding:
+      prefix: -tumor-id
 
-  - id: vcf_normal_id
-    prefix: -vcf-normal-id
-    type: string ? TODO
-
-  - id: tumor_id
-    prefix: -tumor-id
-    type: string ? TODO
-
-  - id: normal_id
-    prefix: -normal-id
-    type: string ? TODO
+  normal_id:
+    type: string
+    inputBinding:
+      prefix: -normal-id
 
 
 outputs:
-  - id: TODO_output_ID
+  output_maf:
     type: File
     outputBinding:
-      glob: outputFileTODO
+      glob: output.maf

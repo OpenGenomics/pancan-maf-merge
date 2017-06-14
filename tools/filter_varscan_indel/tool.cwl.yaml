@@ -1,33 +1,32 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Filter Somaticsniper
+label: Filter TODO
 
 requirements:
-  - class: "DockerRequirement"
-    dockerImageId: "TODO"
+  - class: DockerRequirement
+    dockerImageId: opengenomics/filter_varscan_indel
 
 baseCommand: [perl, /opt/bin/vcf2maf/vcf2vcf.pl, --add-filter]
 
-arguments:
-  - valueFrom: outputFileTODO
-    prefix: --output-vcf
-
 inputs:
-  - id: TODO_input_name
+  vcf:
     type: File
-    prefix: --input-vcf
+    inputBinding:
+      prefix: --input-vcf
 
-  - id: TODO_vcf_tumor_id
+  tumor_id:
     type: string
-    prefix: --vcf-tumor-id
+    inputBinding:
+      prefix: --vcf-tumor-id
 
-  - id: TODO_vcf_normal_id
+  normal_id:
     type: string
-    prefix: --vcf-normal-id
+    inputBinding:
+      prefix: --vcf-normal-id
 
 outputs:
-  - id: TODO_output_ID
+  output_vcf:
     type: File
     outputBinding:
-      glob: outputFileTODO
+      glob: output.vcf

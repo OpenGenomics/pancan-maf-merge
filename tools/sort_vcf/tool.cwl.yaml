@@ -1,15 +1,20 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Filter Radia
+label: Sort a VCF file
 
 requirements:
   - class: DockerRequirement
-    dockerImageId: opengenomics/filter_radia
+    dockerImageId: opengenomics/sort_vcf
 
-baseCommand: [python, /opt/bin/filter_radia.py]
+baseCommand: [python, /opt/bin/vcf-sort.py]
 
 inputs:
+  seqdict:
+    type: File
+    inputBinding:
+      prefix: --seqdict
+
   vcf:
     type: File
     inputBinding:

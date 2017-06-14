@@ -1,31 +1,30 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: VCF merge
+label: Merge VCFs
 
 requirements:
-  - class: "DockerRequirement"
-    dockerImageId: "TODO"
+  - class: DockerRequirement
+    dockerImageId: opengenomics/merge_vcfs
 
 baseCommand: [python, /opt/bin/vcf-merge.py]
---keys %(keys)s --output /path/to/TODO/output.txt %(inputs)s' % {
-        'PACKAGEDIR': PACKAGEDIR,
-        'keys': ' '.join([c for c, f in mergefiles]),
-        'output': tmpfile,
-        'inputs': ' '.join([f for c, f in mergefiles])},
-        shell = True)
+#--keys %(keys)s --output /path/to/TODO/output.txt %(inputs)s' % {
+        #'keys': ' '.join([c for c, f in mergefiles]),
+        #'inputs': ' '.join([f for c, f in mergefiles])},
 
 inputs:
-  - id: keys
-    type: TODO string array?
-    prefix: --keys
+  keys:
+    type: string[]
+    inputBinding:
+      prefix: --keys
 
-  - id: inputTODO
-    type: TODO file array?
-    position: 2
+  vcfs:
+    type: File[]
+    inputBinding:
+      prefix: --input
 
 outputs:
-  - id: TODO_output_ID
+  output_vcf:
     type: File
     outputBinding:
-      glob: outputFileTODO
+      glob: output.vcf

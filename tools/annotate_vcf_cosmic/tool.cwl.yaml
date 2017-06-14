@@ -1,11 +1,11 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: VCF merge
+label: Annotate VCF using Cosmic
 
 requirements:
-  - class: "DockerRequirement"
-    dockerImageId: "TODO"
+  - class: DockerRequirement
+    dockerImageId: opengenomics/annotate_vcf_cosmic
 
 baseCommand:
   - /stornext/snfs2/can/code/jython/jython-2.7.0/bin/jython
@@ -18,38 +18,37 @@ baseCommand:
 # TODO resource requirement?
 # -J-Xmx15g
 
-arguments:
-  - id: outputTODO
-    position: 4
-    valueFrom: TODO?
-
 inputs:
 
-  - id: reference
-    prefix: --reference
+  genome_reference:
     type: File
+    inputBinding:
+      prefix: --reference
     # TODO move reference file to downloadable location and inputs.json example
     # 'reference': '/hgsc_software/cancer-analysis/resources/references/human/hg19/hg19.fa',
 
-  - id: cosmic
-    position: 1
+  cosmic_reference:
     type: File
+    inputBinding:
+      prefix: --cosmic
     # TODO move reference file to downloadable location and inputs.json example
     # 'cosmic': '/hgsc_software/cancer-analysis/resources/annotation-databases/cosmic/v71/CosmicCodingMuts.cnt3.vcf',
 
-  - id: vepannotation
-    type: TODO file
-    position: 2
-
-  - id: valstatus
-    position: 3
+  vcf:
     type: File
+    inputBinding:
+      prefix: --input
+
+  valstatus_database:
+    type: File
+    inputBinding:
+      prefix: --valstatus_database
     # TODO move reference file to downloadable location and inputs.json example
     # 'valstatus': '/hgsc_software/cancer-analysis/resources/dbsnp/hg19/146/dbSNP_b146_GRCh37p13.valstatus.db',
 
 
 outputs:
-  - id: TODO_output_ID
+  output_vcf:
     type: File
     outputBinding:
-      glob: outputFileTODO
+      glob: output.vcf

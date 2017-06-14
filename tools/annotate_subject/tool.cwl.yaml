@@ -5,7 +5,8 @@ label: Annotate a single subject
 doc: TODO
 
 requirements:
-  # TODO subworkflow
+  - class: SubworkflowFeatureRequirement
+  - class: ScatterFeatureRequirement
 
 inputs:
   tumor_id:
@@ -18,89 +19,107 @@ inputs:
     type: File
   valstatus_database:
     type: File
-  muse_variants:
+  muse_vcfs:
     type: File[]
-  radia_variants:
+  radia_vcfs:
     type: File[]
-  somaticsniper_variants:
+  somaticsniper_vcfs:
     type: File[]
   varscan_snp_vcfs:
     type: File[]
   varscan_indel_vcfs:
     type: File[]
+  seqdict:
+    type: File
+  # TODO
+  keys:
+    type: string[]
 
 outputs:
-  maf:
+  output_maf:
     type: File
-    outputSource: post_process_maf/output
+    outputSource: convert_vcf_to_maf/output_maf
 
 steps:
   preprocess_muse:
-    label: Filter and sort MuSE variants
+    label: Filter and sort MuSE vcfs
     doc:
     in:
-      variants: muse_variants
-    out: output
-    scatter: variants
+      seqdict: seqdict
+      vcf: muse_vcfs
+    out: [output_vcf]
+    scatter: vcf
     run: ../preprocess_muse/tool.cwl.yaml
 
   preprocess_radia:
-    label: Filter and sort Radia variants
+    label: Filter and sort Radia vcfs
     doc:
     in:
-      variants: radia_variants
-    out: output
-    scatter: variants
+      seqdict: seqdict
+      vcf: radia_vcfs
+    out: [output_vcf]
+    scatter: vcf
     run: ../preprocess_radia/tool.cwl.yaml
 
   preprocess_somaticsniper:
-    label: Filter and sort SomaticSniper variants
+    label: Filter and sort SomaticSniper vcfs
     doc:
     in:
-      variants: somaticsniper_variants
-    out: output
-    scatter: variants
+      vcf: somaticsniper_vcfs
+      normal_id: normal_id
+      tumor_id: tumor_id
+      seqdict: seqdict
+    out: [output_vcf]
+    scatter: vcf
     run: ../preprocess_somaticsniper/tool.cwl.yaml
 
   preprocess_varscan_snp:
     label: Filter Varscan SNPs
     doc:
     in:
-      variants: varscan_snp_variants
-    out: output
-    scatter: variants
+      normal_id: normal_id
+      tumor_id: tumor_id
+      seqdict: seqdict
+      vcf: varscan_snp_vcfs
+    out: [output_vcf]
+    scatter: vcf
     run: ../preprocess_varscan_snp/tool.cwl.yaml
 
   preprocess_varscan_indel:
     label: Filter Varscan indels
     doc:
     in:
-      variants: varscan_indel_variants
-    out: output
-    scatter: variants
+      normal_id: normal_id
+      tumor_id: tumor_id
+      seqdict: seqdict
+      vcf: varscan_indel_vcfs
+    out: [output_vcf]
+    scatter: vcf
     run: ../preprocess_varscan_indel/tool.cwl.yaml
 
-  merge_variants:
-    label: Merge variants
+  merge_vcfs:
+    label: Merge vcfs
     doc:
     in:
-      variants:
+      keys: keys
+      vcfs:
         linkMerge: merge_flattened
         source:
-          - preprocess_muse/output
-          - preprocess_radia/output
-          - preprocess_somaticsniper/output
-          - preprocess_varscan_snp/output
-          - preprocess_varscan_indel/output
-    out: output
-    run: ../merge_variants/tool.cwl.yaml
+          - preprocess_muse/output_vcf
+          - preprocess_radia/output_vcf
+          - preprocess_somaticsniper/output_vcf
+          - preprocess_varscan_snp/output_vcf
+          - preprocess_varscan_indel/output_vcf
+    out: [output_vcf]
+    run: ../merge_vcfs/tool.cwl.yaml
 
   variant_effect_predictor:
     label: Variant effect predictor (VEP)
     doc:
     in:
-      variants: merge_variants/output
-    out: output
+      vcf: merge_vcfs/output_vcf
+      keys: keys
+    out: [output_vcf]
     run: ../variant_effect_predictor/tool.cwl.yaml
 
   annotate_vcf_cosmic:
@@ -110,16 +129,16 @@ steps:
       genome_reference: genome_reference
       cosmic_reference: cosmic_reference
       valstatus_database: valstatus_database
-      vep_annotation: variant_effect_predictor/output
-    out: output
+      vcf: variant_effect_predictor/output_vcf
+    out: [output_vcf]
     run: ../annotate_vcf_cosmic/tool.cwl.yaml
 
   convert_vcf_to_maf:
     label: VCF to MAF
     doc:
     in:
-      vcf: annotate_vcf_cosmic/output
+      vcf: annotate_vcf_cosmic/output_vcf
       tumor_id: tumor_id
       normal_id: normal_id
-    out: output
+    out: [output_maf]
     run: ../convert_vcf_to_maf/tool.cwl.yaml
