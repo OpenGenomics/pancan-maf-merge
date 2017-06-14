@@ -1,0 +1,98 @@
+cwlVersion: v1.0
+class: Workflow
+
+inputs:
+  muse_vcfs:
+  radia_vcfs:
+  somaticsniper_vcfs:
+  varscan_snp_vcfs:
+  varscan_indel_vcfs:
+
+outputs:
+
+steps:
+  filter_muse:
+    label: Filter MuSE output
+    doc:
+    in:
+    out:
+    run: ../filter_muse/tool.cwl.yaml
+
+  filter_radia:
+    label: Filter Radia output
+    doc:
+    in:
+    out:
+    run: ../filter_radia/tool.cwl.yaml
+
+  filter_somaticsniper:
+    label: Filter SomaticSniper
+    doc:
+    in:
+    out:
+    run: ../filter_somaticsniper/tool.cwl.yaml
+
+  filter_varscan_snp:
+    label: Filter Varscan SNPs
+    doc:
+    in:
+    out:
+    run: ../filter_varscan_snp/tool.cwl.yaml
+
+  filter_varscan_indel:
+    label: Filter Varscan indels
+    doc:
+    in:
+    out:
+    run: ../filter_varscan_indel/tool.cwl.yaml
+
+  sort_vcfs:
+    label: Sort VCFs
+    doc:
+    in:
+    out:
+    run: ../vcf_sort/tool.cwl.yaml
+
+  merge_vcfs:
+    label: Merge VCFs
+    doc:
+    in:
+    out:
+    run: ../vcf_merge/tool.cwl.yaml
+
+  variant_effect_predictor:
+    label: Variant effect predictor (VEP)
+    doc:
+    in:
+    out:
+    run: ../variant_effect_predictor/tool.cwl.yaml
+
+  annotate_vcf_cosmic:
+    label: Annotate VCF Cosmic
+    doc:
+    in:
+    out:
+    run: ../annotate_vcf_cosmic/tool.cwl.yaml
+
+  vcf_to_maf:
+    label: VCF to MAF
+    doc:
+    in:
+    out:
+    run: ../vcf_to_maf/tool.cwl.yaml
+
+  concat_all_mafs:
+    label: Concatenate all MAFs
+    doc:
+    in:
+    out:
+    run:
+    scatter:
+    scatterMethod:
+
+  post_process_maf:
+    label: Post filter MAF
+    doc:
+    in:
+    out:
+    run:
