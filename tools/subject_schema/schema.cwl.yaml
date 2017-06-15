@@ -1,0 +1,33 @@
+class: SchemaDefRequirement
+types:
+  - name: Subject
+    type: record
+    fields:
+      - name: tumor_id
+        label:
+        doc:
+        type: string
+      - name: normal_id
+        label:
+        doc:
+        type: string
+      - name: muse_vcfs
+        label:
+        doc:
+        type: File[]
+      - name: radia_vcfs
+        label:
+        doc:
+        type: File[]
+      - name: somaticsniper_vcfs
+        label:
+        doc:
+        type: File[]
+      - name: varscan_snp_vcfs
+        label:
+        doc:
+        type: File[]
+      - name: varscan_indel_vcfs
+        label:
+        doc:
+        type: File[]

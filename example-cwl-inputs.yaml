@@ -1,0 +1,26 @@
+genome_reference: /hgsc_software/cancer-analysis/resources/references/human/hg19/hg19.fa
+cosmic_reference: /hgsc_software/cancer-analysis/resources/annotation-databases/cosmic/v71/CosmicCodingMuts.cnt3.vcf
+valstatus_database: /hgsc_software/cancer-analysis/resources/dbsnp/hg19/146/dbSNP_b146_GRCh37p13.valstatus.db
+seqdict:
+
+tumor_id: TODO
+normal_id: TODO
+
+keys:
+ - 
+
+muse_vcfs:
+ - 
+
+radia_vcfs:
+ - 
+
+somaticsniper_vcfs:
+ - 
+
+varscan_snp_vcfs:
+ - 
+
+varscan_indel_vcfs:
+ - 
+

@@ -1,17 +1,15 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: 
-
 requirements:
   - class: DockerRequirement
-    dockerImageId: opengenomics/post_process_maf
+    dockerImageId: opengenomics/concat_mafs
 
-baseCommand: [python, /opt/bin/post_process_maf.py]
+baseCommand: [python, /opt/bin/concat_mafs.py]
 
 inputs:
-  maf:
-    type: File
+  mafs:
+    type: File[]
     inputBinding:
       prefix: --input
 
