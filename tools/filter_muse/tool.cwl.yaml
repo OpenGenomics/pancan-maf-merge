@@ -7,16 +7,24 @@ requirements:
   - class: DockerRequirement
     dockerImageId: opengenomics/filter_muse
 
-baseCommand: [python, /opt/bin/filter_muse.py, --level 5]
+baseCommand: [python, /opt/filter_muse.py, --level, '5']
+
+stdout: stdout
+stderr: stderr
 
 inputs:
   vcf:
     type: File
     inputBinding:
-      prefix: --input
+      position: 1
+
+  output_name:
+    type: string
+    inputBinding:
+      position: 2
 
 outputs:
   output_vcf:
     type: File
     outputBinding:
-      glob: output.vcf
+      glob: $(inputs.output_name)
