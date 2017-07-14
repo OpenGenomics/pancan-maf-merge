@@ -1,4 +1,3 @@
-
 import os, os.path, sys
 import logging
 import hgsc_vcf

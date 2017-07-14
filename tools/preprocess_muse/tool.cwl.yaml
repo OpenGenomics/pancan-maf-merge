@@ -19,6 +19,7 @@ steps:
   filter:
     in:
       vcf: vcf
+      output_name: muse.filtered.vcf
     out: [output_vcf]
     run: ../filter_muse/tool.cwl.yaml
 
@@ -26,11 +27,13 @@ steps:
     in:
       seqdict: seqdict
       vcf: filter/output_vcf
+      output_name: muse.sorted.vcf
     out: [output_vcf]
     run: ../sort_vcf/tool.cwl.yaml
 
   normalize:
     in:
       vcf: sort/output_vcf
+      output_name: muse.normalized.vcf
     out: [output_vcf]
     run: ../normalize_vcf/tool.cwl.yaml

@@ -7,21 +7,26 @@ requirements:
   - class: DockerRequirement
     dockerImageId: opengenomics/sort_vcf
 
-baseCommand: [python, /opt/bin/vcf-sort.py]
+baseCommand: [python, /opt/sort_vcf.py]
 
 inputs:
   seqdict:
     type: File
     inputBinding:
-      prefix: --seqdict
+      position: 1
 
   vcf:
     type: File
     inputBinding:
-      prefix: --input
+      position: 2
+
+  output_name:
+    type: string
+    inputBinding:
+      position: 3
 
 outputs:
   output_vcf:
     type: File
     outputBinding:
-      glob: output.vcf
+      glob: $(inputs.output_name)

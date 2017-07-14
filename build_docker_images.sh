@@ -10,3 +10,4 @@ build() {
 build hgsc_vcf
 build filter_muse
 build filter_radia
+build sort_vcf
