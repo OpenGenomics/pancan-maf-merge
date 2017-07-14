@@ -11,3 +11,4 @@ build hgsc_vcf
 build filter_muse
 build filter_radia
 build sort_vcf
+build vcf2maf
