@@ -1,0 +1,35 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+label: Filter TODO
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/filter_varscan_snp
+
+baseCommand: [perl, /opt/bin/vcf2maf/vcf2vcf.pl, --add-filter]
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  vcf:
+    type: File
+    inputBinding:
+      prefix: --input-vcf
+
+  tumor_id:
+    type: string
+    inputBinding:
+      prefix: --vcf-tumor-id
+
+  normal_id:
+    type: string
+    inputBinding:
+      prefix: --vcf-normal-id
+
+outputs:
+  output_vcf:
+    type: File
+    outputBinding:
+      glob: output.vcf

@@ -1,0 +1,35 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+label: Sort a VCF file
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/sort_vcf
+
+baseCommand: [python, /opt/sort_vcf.py]
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  seqdict:
+    type: File
+    inputBinding:
+      position: 1
+
+  vcf:
+    type: File
+    inputBinding:
+      position: 2
+
+  output_name:
+    type: string
+    inputBinding:
+      position: 3
+
+outputs:
+  output_vcf:
+    type: File
+    outputBinding:
+      glob: $(inputs.output_name)

@@ -1,0 +1,40 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+label: vcf2vcf
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/vcf2maf
+
+baseCommand: [perl, /opt/vcf2maf/vcf2vcf.pl]
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  vcf:
+    type: File
+    inputBinding:
+      prefix: --input-vcf
+
+  output_name:
+    type: string
+    inputBinding:
+      prefix: --output-vcf
+
+  vcf_tumor_id:
+    type: string
+    inputBinding:
+      prefix: --vcf-tumor-id
+
+  vcf_normal_id:
+    type: string
+    inputBinding:
+      prefix: --vcf-normal-id
+
+outputs:
+  output_vcf:
+    type: File
+    outputBinding:
+      glob: $(inputs.output_name)

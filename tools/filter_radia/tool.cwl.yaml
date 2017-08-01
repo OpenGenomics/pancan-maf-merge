@@ -1,0 +1,30 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+label: Filter Radia
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/filter_radia
+
+baseCommand: [python, /opt/filter_radia.py]
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  vcf:
+    type: File
+    inputBinding:
+      position: 1
+
+  output_name:
+    type: string
+    inputBinding:
+      position: 2
+
+outputs:
+  output_vcf:
+    type: File
+    outputBinding:
+      glob: $(inputs.output_name)

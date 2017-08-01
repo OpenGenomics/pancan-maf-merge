@@ -1,0 +1,23 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/concat_mafs
+
+baseCommand: [python, /opt/bin/concat_mafs.py]
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  mafs:
+    type: File[]
+    inputBinding:
+      prefix: --input
+
+outputs:
+  output_maf:
+    type: File
+    outputBinding:
+      glob: output.maf

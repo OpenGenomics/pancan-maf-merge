@@ -1,0 +1,62 @@
+cwlVersion: v1.0
+class: Workflow
+
+requirements:
+  - class: ScatterFeatureRequirement
+
+inputs:
+  subjects:
+    label: Subjects
+    type: array
+    items:
+      type: "../subject_schema/schema.cwl.yaml#Subject"
+
+  # TODO per-subject?
+  genome_reference:
+    type: File
+  cosmic_reference:
+    type: File
+  valstatus_database:
+    type: File
+  seqdict:
+    type: File
+
+  # TODO
+  keys:
+    type: string[]
+
+outputs:
+  output_maf:
+    type: File
+    outputSource: post_process_maf/output_maf
+
+steps:
+  annotate_subjects:
+    label: Annotate all subjects
+    doc:
+    in:
+      subject: subjects
+      genome_reference: genome_reference
+      cosmic_reference: cosmic_reference
+      valstatus_database: valstatus_database
+      seqdict: seqdict
+      keys: keys
+    out: [annotated_mafs]
+    scatter: subject
+    run: ../annotate_subject/tool.cwl.yaml
+
+  concat_mafs:
+    label: Concatenate multiple MAF files
+    doc:
+    in:
+      mafs: annotate_subjects/annotated_mafs
+    out: [output_maf]
+    run: ../concat_mafs/tool.cwl.yml
+
+  post_process_maf:
+    label: Post-process MAF
+    doc:
+    in:
+      maf: concat_mafs/output_maf
+    out: [output_maf]
+    run: ../post_process_maf/tool.cwl.yaml

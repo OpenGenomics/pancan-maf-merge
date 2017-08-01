@@ -1,0 +1,24 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+label: 
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/post_process_maf
+
+baseCommand: [python, /opt/bin/post_process_maf.py]
+stdout: stdout
+stderr: stderr
+
+inputs:
+  maf:
+    type: File
+    inputBinding:
+      prefix: --input
+
+outputs:
+  output_maf:
+    type: File
+    outputBinding:
+      glob: output.maf
