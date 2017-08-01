@@ -1,2 +1,2 @@
 FROM opengenomics/hgsc_vcf
-ADD vcf-merge.py /opt/vcf-merge.py
+ADD merge_vcfs.py /opt/merge_vcfs.py

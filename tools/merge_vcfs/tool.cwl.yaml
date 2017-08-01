@@ -7,15 +7,19 @@ requirements:
   - class: DockerRequirement
     dockerImageId: opengenomics/merge_vcfs
 
-baseCommand: [python, /opt/bin/vcf-merge.py]
-#--keys %(keys)s --output /path/to/TODO/output.txt %(inputs)s' % {
-        #'keys': ' '.join([c for c, f in mergefiles]),
-        #'inputs': ' '.join([f for c, f in mergefiles])},
+baseCommand: [python, /opt/merge_vcfs.py]
 
 stdout: stdout
 stderr: stderr
 
 inputs:
+
+  output_name:
+    type: string
+    default: output.vcf
+    inputBinding:
+      prefix: --output
+
   keys:
     type: string[]
     inputBinding:

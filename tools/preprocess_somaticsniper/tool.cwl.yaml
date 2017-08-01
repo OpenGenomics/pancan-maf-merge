@@ -32,11 +32,19 @@ steps:
     in:
       seqdict: seqdict
       vcf: filter/output_vcf
+      output_name:
+        valueFrom: somaticsniper.sorted.vcf
     out: [output_vcf]
     run: ../sort_vcf/tool.cwl.yaml
 
   normalize:
     in:
       vcf: sort/output_vcf
+      output_name:
+        valueFrom: somaticsniper.normalized.vcf
+      vcf_tumor_id:
+        valueFrom: TODO
+      vcf_normal_id:
+        valueFrom: TODO
     out: [output_vcf]
-    run: ../normalize_vcf/tool.cwl.yaml
+    run: ../vcf2maf/vcf2vcf.cwl.yaml

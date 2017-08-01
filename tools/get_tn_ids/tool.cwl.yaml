@@ -1,0 +1,46 @@
+cwlVersion: v1.0
+class: CommandLineTool
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/get_tn_ids
+
+baseCommand: [python, /opt/get_tn_ids.py]
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  vcf:
+    type: File
+    inputBinding:
+      prefix: --input
+
+outputs:
+  normal:
+    type: string
+    outputBinding:
+      glob: stdout
+      loadContents: true
+      outputEval: "$( JSON.parse(self[0].contents)['nid'] )"
+
+  tumor:
+    type: string
+    outputBinding:
+      glob: stdout
+      loadContents: true
+      outputEval: "$( JSON.parse(self[0].contents)['tid'] )"
+
+  nbar:
+    type: string
+    outputBinding:
+      glob: stdout
+      loadContents: true
+      outputEval: "$( JSON.parse(self[0].contents)['nbar'] )"
+
+  tbar:
+    type: string
+    outputBinding:
+      glob: stdout
+      loadContents: true
+      outputEval: "$( JSON.parse(self[0].contents)['tbar'] )"

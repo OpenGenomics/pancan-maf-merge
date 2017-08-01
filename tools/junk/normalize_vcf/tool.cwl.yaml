@@ -1,0 +1,34 @@
+cwlVersion: v1.0
+class: Workflow
+
+requirements:
+  - class: DockerRequirement
+    dockerImageId: opengenomics/normalize_vcf
+
+baseCommand: ["perl", "/opt/vcf2maf/vcf2vcf.pl"]
+
+--output-vcf %(output)s
+--vcf-tumor-id %(tid)s
+--vcf-normal-id %(nid)s'
+% {
+-        'PACKAGEDIR': PACKAGEDIR,
+-        'input': fpath,
+-        'output': tmpfile,
+-        'tid': tid,
+-        'nid': nid},
+-        shell = True)
+
+stdout: stdout
+stderr: stderr
+
+inputs:
+  vcf:
+    type: File
+    inputBinding:
+      prefix: --input
+
+outputs:
+  output_vcf:
+    type: File
+    outputBinding:
+      glob: output.vcf

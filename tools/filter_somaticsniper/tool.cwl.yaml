@@ -5,9 +5,9 @@ label: Filter Somaticsniper
 
 requirements:
   - class: DockerRequirement
-    dockerImageId: opengenomics/filter_somaticsniper
+    dockerImageId: opengenomics/vcf2maf
 
-baseCommand: [perl, /opt/bin/vcf2maf/vcf2vcf.pl, --add-filter]
+baseCommand: [perl, /opt/vcf2maf/vcf2vcf.pl, --add-filter]
 
 stdout: stdout
 stderr: stderr
@@ -21,15 +21,21 @@ inputs:
   tumor_id:
     type: string
     inputBinding:
-      prefix: --tumor-id
+      prefix: --vcf-tumor-id
 
   normal_id:
     type: string
     inputBinding:
-      prefix: --normal-id
+      prefix: --vcf-normal-id
+
+  output_name:
+    type: string
+    default: output.vcf
+    inputBinding:
+      prefix: --output-vcf
 
 outputs:
   output_vcf:
     type: File
     outputBinding:
-      glob: output.vcf
+      glob: "$( inputs.output_name )"

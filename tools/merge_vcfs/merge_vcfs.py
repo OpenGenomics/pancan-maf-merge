@@ -63,8 +63,8 @@ class MetaReader(object):
         elif 'PRIMARY' not in sampleMapping and 'RECURRANCE' in sampleMapping:
             sampleMapping['PRIMARY'] = sampleMapping['RECURRANCE']
         logger.info("Sample mapping for %s: %s", fobj.name, sampleMapping)
-        self.normal = sampleMapping['NORMAL']
-        self.primary = sampleMapping['PRIMARY']
+        self.normal = sampleMapping.get('NORMAL', "Unknown normal sample ID")
+        self.primary = sampleMapping.get('PRIMARY', "Unknown primary sample ID")
         self._next = None
         self.take() # call to take this time will return None but will also fast forward the reader to the next position
     def __cmp__(self, other):
@@ -85,8 +85,10 @@ class MetaReader(object):
                     logger.info("Closing %s", self.caller)
                     self.reader.fobj.close()
                     new = None
+
                 if 'NORMAL' not in n['SAMPLES']:
                     n['SAMPLES']['NORMAL'] = n['SAMPLES'][self.normal]
+
                 if 'PRIMARY' not in n['SAMPLES']: 
                     if self.primary in n['SAMPLES']:
                         n['SAMPLES']['PRIMARY'] = n['SAMPLES'][self.primary]
@@ -96,12 +98,16 @@ class MetaReader(object):
                         n['SAMPLES']['PRIMARY'] = n['SAMPLES']['RECURRANCE']
                     else:
                         raise ValueError("Can't find the PRIMARY sample")
+
                 if n['SAMPLES']['NORMAL']['GT'][0] not in  ('0/0', '0', '.', './.'):
                     continue
+
                 if 'PASS' not in n['FILTER']:
                     continue
+
                 new = n
                 break
+
             except StopIteration: # swallow the error and just set to None
                 logger.info("Stopped iteration")
                 logger.info("Closing %s", self.caller)
@@ -128,14 +134,17 @@ class MultiVCFReader(object):
         self.infiles = {f:MetaReader(open(f, 'r')) for f in infiles}
         self.outfile = outfile
         self.outwriter = hgsc_vcf.Writer(open(self.outfile, 'w'), self.generate_header())
+
         # get the normal and primary sample ids
         sampleMapping = {l.fields.get('ID'):l.fields.get('SampleTCGABarcode') for l in self.infiles.values()[0].reader.header.get_headers('SAMPLE')}
+
         if 'PRIMARY' not in sampleMapping and 'METASTATIC' in sampleMapping:
             sampleMapping['PRIMARY'] = sampleMapping['METASTATIC']
         elif 'PRIMARY' not in sampleMapping and 'RECURRANCE' in sampleMapping:
             sampleMapping['PRIMARY'] = sampleMapping['RECURRANCE']
-        self.normal = sampleMapping['NORMAL']
-        self.primary = sampleMapping['PRIMARY']
+
+        self.normal = sampleMapping.get('NORMAL', "Unknown normal sample ID")
+        self.primary = sampleMapping.get('PRIMARY', "Unknown primary sample ID")
         self.keymap = dict(zip(infiles, keys))
 
     # lets make this a generator so that we can keep up with the sorting
@@ -275,7 +284,7 @@ def resolve_records(batch, callermap):
 
 
 def main(args):
-    reader = MultiVCFReader(args.INFILES, args.output, args.keys)
+    reader = MultiVCFReader(args.input, args.output, args.keys)
     reader.outwriter.header.add_header('##INFO=<ID=CENTERS,Number=1,Type=String,Description="Center files that made the call">')
     reader.outwriter.write_header()
     
@@ -295,7 +304,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--keys', type = str, help = 'caller keys', nargs = '+')
     parser.add_argument('--output', type = str, help = 'output file')
-    parser.add_argument('INFILES', nargs='+', type = str, help = 'input files')
+    parser.add_argument('--input', nargs='+', type = str, help = 'input files')
 
     args = parser.parse_args()
     main(args)
