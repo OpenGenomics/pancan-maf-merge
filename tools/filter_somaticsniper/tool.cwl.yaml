@@ -9,6 +9,9 @@ requirements:
 
 baseCommand: [perl, /opt/bin/vcf2maf/vcf2vcf.pl, --add-filter]
 
+stdout: stdout
+stderr: stderr
+
 inputs:
   vcf:
     type: File

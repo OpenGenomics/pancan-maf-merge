@@ -12,6 +12,9 @@ baseCommand:
   - /hgsc_software/cancer-analysis/halotron/illumina/illumina_v0.0.2/halotron/illumina/annotation/annotate_vcf_cosmic.py
   - "-J-Xmx15g"
 
+stdout: stdout
+stderr: stderr
+
 inputs:
 
   genome_reference:

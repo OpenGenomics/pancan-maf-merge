@@ -9,6 +9,9 @@ requirements:
 
 baseCommand: [python, /opt/sort_vcf.py]
 
+stdout: stdout
+stderr: stderr
+
 inputs:
   seqdict:
     type: File

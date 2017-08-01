@@ -12,3 +12,4 @@ build filter_muse
 build filter_radia
 build sort_vcf
 build vcf2maf
+build annotate_vcf_cosmic

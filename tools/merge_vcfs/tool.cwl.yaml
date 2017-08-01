@@ -12,6 +12,9 @@ baseCommand: [python, /opt/bin/vcf-merge.py]
         #'keys': ' '.join([c for c, f in mergefiles]),
         #'inputs': ' '.join([f for c, f in mergefiles])},
 
+stdout: stdout
+stderr: stderr
+
 inputs:
   keys:
     type: string[]

@@ -14,6 +14,9 @@ baseCommand:
   - -output-maf /path/to/output/TODO
   - -copythrough COSMIC,CENTERS,CONTEXT,DBVS
 
+stdout: stdout
+stderr: stderr
+
 inputs:
   vcf:
     type: File

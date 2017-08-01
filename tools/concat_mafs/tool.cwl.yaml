@@ -7,6 +7,9 @@ requirements:
 
 baseCommand: [python, /opt/bin/concat_mafs.py]
 
+stdout: stdout
+stderr: stderr
+
 inputs:
   mafs:
     type: File[]

@@ -8,6 +8,8 @@ requirements:
     dockerImageId: opengenomics/post_process_maf
 
 baseCommand: [python, /opt/bin/post_process_maf.py]
+stdout: stdout
+stderr: stderr
 
 inputs:
   maf:
